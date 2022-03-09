@@ -1,0 +1,4 @@
+[submodule "rdp/rabbit-digger-pro"]
+	path = rdp/rabbit-digger-pro
+	url = git@github.com:rabbit-digger/rabbit-digger-pro.git
+	branch = main
