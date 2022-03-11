@@ -8,11 +8,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 final globalPrefs = SharedPreferences.getInstance();
 
 void main() {
-  runApp(const MyApp());
+  runApp(const App());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
