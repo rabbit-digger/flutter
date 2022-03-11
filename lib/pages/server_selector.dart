@@ -39,7 +39,7 @@ class ServerSelectorState extends State<ServerSelector> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _pushAddTodoScreen,
+        onPressed: _pushAddScreen,
         tooltip: 'New Server',
         child: const Icon(Icons.add),
       ),
@@ -50,25 +50,43 @@ class ServerSelectorState extends State<ServerSelector> {
     return ListTile(
       title: Text(item.title()),
       subtitle: Text(item.subtitle()),
-      trailing: IconButton(
-        icon: const Icon(Icons.delete),
-        onPressed: () => _remove(item),
-      ),
+      trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+        IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () => _pushEditScreen(item),
+        ),
+        IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () => _remove(item),
+        ),
+      ]),
     );
   }
 
-  void _pushAddTodoScreen() {
-    Navigator.of(context).push(
-        // MaterialPageRoute will automatically animate the screen entry, as well
-        // as adding a back button to close it
-        MaterialPageRoute(builder: (context) {
-      return ServerForm(onSubmit: _add);
+  void _pushEditScreen(ServerItem i) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return ServerForm(
+          title: const Text('Edit Server'),
+          formdata: i,
+          onSubmit: (_) => _edit());
+    }));
+  }
+
+  void _pushAddScreen() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return ServerForm(title: const Text('Add Server'), onSubmit: _add);
     }));
   }
 
   void _add(ServerItem i) {
     setState(() {
       _servers?.add(i);
+    });
+  }
+
+  void _edit() {
+    setState(() {
+      _servers?.save();
     });
   }
 
@@ -110,10 +128,12 @@ class ServerSelectorState extends State<ServerSelector> {
 }
 
 class ServerForm extends StatefulWidget {
-  const ServerForm({Key? key, this.formdata, required this.onSubmit})
+  const ServerForm(
+      {Key? key, this.formdata, required this.onSubmit, required this.title})
       : super(key: key);
   final void Function(ServerItem) onSubmit;
   final ServerItem? formdata;
+  final Widget title;
 
   @override
   State<StatefulWidget> createState() => ServerFormState();
@@ -121,8 +141,14 @@ class ServerForm extends StatefulWidget {
 
 class ServerFormState extends State<ServerForm> {
   ServerFormState();
-  late ServerItem formdata = widget.formdata ?? ServerItem(url: '');
+  late ServerItem formdata;
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    formdata = widget.formdata ?? ServerItem(url: '');
+  }
 
   _submit() {
     if (_formKey.currentState!.validate()) {
@@ -136,7 +162,7 @@ class ServerFormState extends State<ServerForm> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Add a new Server'),
+          title: widget.title,
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.check),
@@ -161,6 +187,7 @@ class ServerFormState extends State<ServerForm> {
                   }
                   return null;
                 },
+                initialValue: formdata.url,
                 onSaved: (v) => formdata.url = v ?? '',
               ),
               TextFormField(
@@ -169,6 +196,7 @@ class ServerFormState extends State<ServerForm> {
                     hintText: 'Server1',
                     contentPadding: EdgeInsets.all(16.0),
                     prefixIcon: Icon(Icons.description)),
+                initialValue: formdata.description,
                 onSaved: (v) => formdata.description = v ?? '',
               ),
               TextFormField(
@@ -179,6 +207,7 @@ class ServerFormState extends State<ServerForm> {
                     prefixIcon: Icon(Icons.lock)),
                 obscureText: true,
                 textInputAction: TextInputAction.done,
+                initialValue: formdata.token,
                 onSaved: (v) => formdata.token = v ?? '',
                 onFieldSubmitted: (_) => _submit(),
               )
