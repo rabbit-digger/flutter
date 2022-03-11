@@ -19,6 +19,7 @@ class App extends StatelessWidget {
     return MaterialApp(
         title: 'Rabbit Digger Pro',
         theme: ThemeData(primarySwatch: Colors.blue),
+        debugShowCheckedModeBanner: false,
         home: ServerSelector(
           builder: (server) => ChangeNotifierProvider(
               create: (context) => RDPModel(server: server),

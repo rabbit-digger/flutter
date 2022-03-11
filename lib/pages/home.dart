@@ -26,14 +26,12 @@ class _HomePageState extends State<HomePage> {
       return Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () {
-                setSelected.set(null);
-              },
-            ),
-          ],
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              setSelected.set(null);
+            },
+          ),
         ),
         body: Center(
           child: Column(
