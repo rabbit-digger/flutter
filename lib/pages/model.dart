@@ -38,24 +38,41 @@ class ServerItem {
 
 class ServerList {
   final List<ServerItem> items;
+  ServerItem? selected;
 
-  ServerList(this.items);
+  ServerList({required this.items, this.selected});
 
   static ServerList fromJson(String text) {
     try {
-      Iterable l = json.decode(text);
+      final obj = json.decode(text);
+      int? selectedIndex = obj['selected'];
+      Iterable l = obj['server_list'];
       final items =
           List<ServerItem>.from(l.map((model) => ServerItem.fromJson(model)));
-      return ServerList(items);
+      return ServerList(
+          items: items,
+          selected: selectedIndex != null ? items[selectedIndex] : null);
     } catch (e) {
       if (kDebugMode) {
         print('ServerList.fromJson: $e');
       }
-      return ServerList([]);
+      return ServerList(items: []);
     }
   }
 
-  List<ServerItem> toJson() => items;
+  Map<String, dynamic> toJson() => {
+        'server_list': items,
+        'selected': selected != null ? items.indexOf(selected!) : null,
+      };
+
+  ServerItem? getSelected() {
+    return selected;
+  }
+
+  setSelected(ServerItem i) async {
+    selected = i;
+    return await save();
+  }
 
   add(ServerItem i) async {
     items.add(i);

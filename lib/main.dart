@@ -31,8 +31,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: ServerSelector(
-          child: ChangeNotifierProvider(
-              create: (context) => RDPModel("hello world from root"),
+          builder: (server) => ChangeNotifierProvider(
+              create: (context) =>
+                  RDPModel('Hello from ${server.inlineDescription()}'),
               child: const MyHomePage(title: 'Flutter Demo Home Page'))),
     );
   }

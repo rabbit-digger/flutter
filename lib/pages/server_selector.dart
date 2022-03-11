@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rdp_flutter/pages/model.dart';
 
 class ServerSelector extends StatefulWidget {
-  const ServerSelector({Key? key, required this.child}) : super(key: key);
-  final Widget? child;
+  const ServerSelector({Key? key, required this.builder}) : super(key: key);
+  final Widget Function(ServerItem server) builder;
 
   @override
   State<StatefulWidget> createState() => ServerSelectorState();
@@ -28,22 +28,28 @@ class ServerSelectorState extends State<ServerSelector> {
   @override
   Widget build(BuildContext context) {
     final items = _servers?.items ?? [];
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Select a Server"),
-      ),
-      body: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return _buildItem(items[index]);
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _pushAddScreen,
-        tooltip: 'New Server',
-        child: const Icon(Icons.add),
-      ),
-    );
+    final selected = _servers?.getSelected();
+
+    if (selected != null) {
+      return widget.builder(selected);
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text("Select a Server"),
+        ),
+        body: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) {
+            return _buildItem(items[index]);
+          },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _pushAddScreen,
+          tooltip: 'New Server',
+          child: const Icon(Icons.add),
+        ),
+      );
+    }
   }
 
   Widget _buildItem(ServerItem item) {
@@ -60,6 +66,11 @@ class ServerSelectorState extends State<ServerSelector> {
           onPressed: () => _remove(item),
         ),
       ]),
+      onTap: () => {
+        setState(() {
+          _servers?.setSelected(item);
+        })
+      },
     );
   }
 
