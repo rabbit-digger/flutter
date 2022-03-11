@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:provider/provider.dart';
+import 'package:rdp_flutter/model.dart';
 
 class RDPModel extends ChangeNotifier {
-  final String _content;
-  String get content => _content;
-  RDPModel(String content)
-      : _content = content,
-        super();
+  final ServerItem server;
+
+  RDPModel({required this.server}) : super();
 }

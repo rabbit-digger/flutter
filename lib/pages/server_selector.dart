@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rdp_flutter/pages/model.dart';
+import 'package:rdp_flutter/model.dart';
 
 class ServerSelector extends StatefulWidget {
   const ServerSelector({Key? key, required this.builder}) : super(key: key);
@@ -14,7 +14,7 @@ class SetSelected extends ChangeNotifier {
   SetSelected(this._setSelected);
   final Function(ServerItem?) _setSelected;
 
-  void setSelected(ServerItem? server) {
+  void set(ServerItem? server) {
     _setSelected(server);
     notifyListeners();
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rdp_flutter/pages/model.dart';
 import 'package:rdp_flutter/pages/server_selector.dart';
 import 'package:rdp_flutter/provider/rdp_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,8 +32,7 @@ class MyApp extends StatelessWidget {
       ),
       home: ServerSelector(
           builder: (server) => ChangeNotifierProvider(
-              create: (context) =>
-                  RDPModel('Hello from ${server.inlineDescription()}'),
+              create: (context) => RDPModel(server: server),
               child: const MyHomePage(title: 'Flutter Demo Home Page'))),
     );
   }
@@ -107,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () {
-                setSelected.setSelected(null);
+                setSelected.set(null);
               },
             ),
           ],
@@ -139,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 '$_counter',
                 style: Theme.of(context).textTheme.headline4,
               ),
-              Text('Content: ' + rdp.content),
+              Text('Content: ' + rdp.server.inlineDescription()),
             ],
           ),
         ),
