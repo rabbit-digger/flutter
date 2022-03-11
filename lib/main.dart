@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rdp_flutter/pages/model.dart';
 import 'package:rdp_flutter/pages/server_selector.dart';
 import 'package:rdp_flutter/provider/rdp_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -89,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final setSelected = Provider.of<SetSelected>(context);
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -101,6 +103,14 @@ class _MyHomePageState extends State<MyHomePage> {
           // Here we take the value from the MyHomePage object that was created by
           // the App.build method, and use it to set our appbar title.
           title: Text(widget.title),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.logout),
+              onPressed: () {
+                setSelected.setSelected(null);
+              },
+            ),
+          ],
         ),
         body: Center(
           // Center is a layout widget. It takes a single child and positions it

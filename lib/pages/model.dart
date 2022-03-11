@@ -69,7 +69,7 @@ class ServerList {
     return selected;
   }
 
-  setSelected(ServerItem i) async {
+  setSelected(ServerItem? i) async {
     selected = i;
     return await save();
   }

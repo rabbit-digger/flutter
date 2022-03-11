@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rdp_flutter/pages/model.dart';
 
 class ServerSelector extends StatefulWidget {
@@ -7,6 +8,16 @@ class ServerSelector extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => ServerSelectorState();
+}
+
+class SetSelected extends ChangeNotifier {
+  SetSelected(this._setSelected);
+  final Function(ServerItem?) _setSelected;
+
+  void setSelected(ServerItem? server) {
+    _setSelected(server);
+    notifyListeners();
+  }
 }
 
 class ServerSelectorState extends State<ServerSelector> {
@@ -25,13 +36,21 @@ class ServerSelectorState extends State<ServerSelector> {
     _load();
   }
 
+  setSelected(ServerItem? i) {
+    setState(() {
+      _servers?.setSelected(i);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final items = _servers?.items ?? [];
     final selected = _servers?.getSelected();
 
     if (selected != null) {
-      return widget.builder(selected);
+      return ChangeNotifierProvider(
+          create: (context) => SetSelected(setSelected),
+          child: widget.builder(selected));
     } else {
       return Scaffold(
         appBar: AppBar(
