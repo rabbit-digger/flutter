@@ -7,6 +7,10 @@ extension Localization on String {
         'zh_cn': '仪表盘',
       } +
       {
+        'en_us': 'Select',
+        'zh_cn': '选项',
+      } +
+      {
         'en_us': 'Config',
         'zh_cn': '配置',
       } +

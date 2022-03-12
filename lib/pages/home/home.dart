@@ -21,11 +21,15 @@ class _HomePageState extends State<HomePage> {
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
     Text(
-      'Index 1: Business',
+      'Select',
       style: optionStyle,
     ),
     Text(
-      'Index 2: School',
+      'Config',
+      style: optionStyle,
+    ),
+    Text(
+      'Connection',
       style: optionStyle,
     ),
   ];
@@ -48,17 +52,22 @@ class _HomePageState extends State<HomePage> {
       ),
       body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
+            icon: const Icon(Icons.area_chart),
             label: 'Dashboard'.i18n,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.business),
+            icon: const Icon(Icons.account_tree),
+            label: 'Select'.i18n,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.list),
             label: 'Config'.i18n,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.school),
+            icon: const Icon(Icons.link),
             label: 'Connections'.i18n,
           ),
         ],
