@@ -4,6 +4,7 @@ import 'package:rdp_flutter/pages/server_selector/server_selector.dart';
 
 import 'home.i18n.dart';
 import 'tabs/dashboard.dart';
+import 'tabs/connections.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -28,10 +29,7 @@ class _HomePageState extends State<HomePage> {
       'Config',
       style: optionStyle,
     ),
-    Text(
-      'Connection',
-      style: optionStyle,
-    ),
+    ConnectionView(),
   ];
 
   void _onItemTapped(int index) {

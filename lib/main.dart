@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:rdp_flutter/pages/home/home.dart';
 import 'package:rdp_flutter/pages/server_selector/server_selector.dart';
 import 'package:rdp_flutter/provider/rdp_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:i18n_extension/i18n_widget.dart';
-
-final globalPrefs = SharedPreferences.getInstance();
 
 void main() {
   runApp(const App());
