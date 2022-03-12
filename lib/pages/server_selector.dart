@@ -41,7 +41,7 @@ class ServerSelectorState extends State<ServerSelector> {
     _load();
   }
 
-  setSelected(ServerItem? i) {
+  void setSelected(ServerItem? i) {
     setState(() {
       _servers?.setSelected(i);
     });
@@ -90,48 +90,33 @@ class ServerSelectorState extends State<ServerSelector> {
           onPressed: () => _remove(item),
         ),
       ]),
-      onTap: () => {
-        setState(() {
-          _servers?.setSelected(item);
-        })
-      },
+      onTap: () => setSelected(item),
     );
   }
 
-  void _pushEditScreen(ServerItem i) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+  void _pushEditScreen(ServerItem i) async {
+    await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return ServerForm(
-          title: const Text('Edit Server'),
-          formdata: i,
-          onSubmit: (_) => _edit());
+        title: const Text('Edit Server'),
+        formdata: i,
+      );
     }));
-  }
-
-  void _pushAddScreen() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return ServerForm(title: const Text('Add Server'), onSubmit: _add);
-    }));
-  }
-
-  void _add(ServerItem i) {
-    setState(() {
-      _servers?.add(i);
-    });
-  }
-
-  void _edit() {
     setState(() {
       _servers?.save();
     });
   }
 
-  void _removeItem(ServerItem i) {
+  void _pushAddScreen() async {
+    ServerItem i =
+        await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+      return const ServerForm(title: Text('Add Server'));
+    }));
     setState(() {
-      _servers?.remove(i);
+      _servers?.add(i);
     });
   }
 
-  _remove(ServerItem i) {
+  void _remove(ServerItem i) {
     AlertDialog alert = AlertDialog(
       title: const Text("You are going to remove this server"),
       content: Text(
@@ -146,7 +131,9 @@ class ServerSelectorState extends State<ServerSelector> {
         TextButton(
           child: const Text("Remove"),
           onPressed: () {
-            _removeItem(i);
+            setState(() {
+              _servers?.remove(i);
+            });
             Navigator.of(context).pop();
           },
         ),
@@ -163,10 +150,8 @@ class ServerSelectorState extends State<ServerSelector> {
 }
 
 class ServerForm extends StatefulWidget {
-  const ServerForm(
-      {Key? key, this.formdata, required this.onSubmit, required this.title})
+  const ServerForm({Key? key, this.formdata, required this.title})
       : super(key: key);
-  final void Function(ServerItem) onSubmit;
   final ServerItem? formdata;
   final Widget title;
 
@@ -188,8 +173,7 @@ class ServerFormState extends State<ServerForm> {
   _submit() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      widget.onSubmit(formdata);
-      Navigator.pop(context);
+      Navigator.pop(context, formdata);
     }
   }
 
