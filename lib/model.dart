@@ -2,9 +2,20 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'model.g.dart';
 
 const String serverKey = 'server_list';
 
+@JsonSerializable()
+class Connection {
+  final String id;
+
+  Connection(this.id);
+}
+
+@JsonSerializable()
 class ServerItem {
   String? description;
   String url;
@@ -12,16 +23,10 @@ class ServerItem {
 
   ServerItem({required this.url, this.description, this.token});
 
-  ServerItem.fromJson(Map<String, dynamic> json)
-      : description = json['description'],
-        url = json['url'],
-        token = json['token'];
+  factory ServerItem.fromJson(Map<String, dynamic> json) =>
+      _$ServerItemFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        'description': description,
-        'url': url,
-        'token': token,
-      };
+  Map<String, dynamic> toJson() => _$ServerItemToJson(this);
 
   String title() {
     return isEmpty(description) ? url : description!;
