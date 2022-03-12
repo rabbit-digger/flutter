@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:rdp_flutter/pages/home.dart';
 import 'package:rdp_flutter/pages/server_selector.dart';
 import 'package:rdp_flutter/provider/rdp_model.dart';

@@ -10,12 +10,17 @@ class ServerSelector extends StatefulWidget {
   State<StatefulWidget> createState() => ServerSelectorState();
 }
 
-class SetSelected extends ChangeNotifier {
-  SetSelected(this._setSelected);
+class SelectServer extends ChangeNotifier {
+  SelectServer(this._setSelected);
   final Function(ServerItem?) _setSelected;
 
   void set(ServerItem? server) {
     _setSelected(server);
+    notifyListeners();
+  }
+
+  void clear() {
+    _setSelected(null);
     notifyListeners();
   }
 }
@@ -47,28 +52,28 @@ class ServerSelectorState extends State<ServerSelector> {
     final items = _servers?.items ?? [];
     final selected = _servers?.getSelected();
 
-    if (selected != null) {
-      return ChangeNotifierProvider(
-          create: (context) => SetSelected(setSelected),
-          child: widget.builder(selected));
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text("Select a Server"),
-        ),
-        body: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return _buildItem(items[index]);
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _pushAddScreen,
-          tooltip: 'New Server',
-          child: const Icon(Icons.add),
-        ),
-      );
-    }
+    final child = selected != null
+        ? ChangeNotifierProvider(
+            create: (context) => SelectServer(setSelected),
+            child: widget.builder(selected))
+        : Scaffold(
+            appBar: AppBar(
+              title: const Text("Select a Server"),
+            ),
+            body: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                return _buildItem(items[index]);
+              },
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: _pushAddScreen,
+              tooltip: 'New Server',
+              child: const Icon(Icons.add),
+            ),
+          );
+
+    return child;
   }
 
   Widget _buildItem(ServerItem item) {
