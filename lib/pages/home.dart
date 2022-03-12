@@ -14,29 +14,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late WebSocketChannel? _channel;
-
   @override
   void initState() {
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
-    final rdp = Provider.of<RDPModel>(context);
-    _channel = rdp.connections();
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    _channel?.sink.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final setSelected = Provider.of<SetSelected>(context);
+    final setSelected = context.watch<SetSelected>();
+    final conns = context.watch<RDPConnections>();
 
     return Scaffold(
       appBar: AppBar(
@@ -52,8 +38,9 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('Content: ' +
-                context.watch<RDPModel>().server.inlineDescription()),
+            Text('Current server: ' + conns.server.inlineDescription()),
+            Text('Total download: ${conns.state.totalDownload}'),
+            Text('Total upload: ${conns.state.totalUpload}'),
           ],
         ),
       ),

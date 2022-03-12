@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
-import 'package:rdp_flutter/model.dart';
+import 'package:rdp_flutter/model.dart' as model;
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class RDPProvider extends StatelessWidget {
-  final ServerItem server;
+  final model.ServerItem server;
   final Widget? child;
 
   const RDPProvider({Key? key, required this.server, this.child})
@@ -13,18 +15,34 @@ class RDPProvider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (context) => RDPModel(server: server), child: child);
+        create: (context) => RDPConnections(server: server), child: child);
   }
 }
 
-class RDPModel extends ChangeNotifier {
-  final ServerItem server;
+class RDPConnections extends ChangeNotifier {
+  final model.ServerItem server;
+  WebSocketChannel? _channel;
+  model.ConnectionState _state = model.ConnectionState();
 
-  RDPModel({required this.server}) : super();
-
-  WebSocketChannel connections() {
+  RDPConnections({required this.server}) : super() {
     final channel = WebSocketChannel.connect(Uri.parse(
         '${server.url.replaceFirst('http', 'ws')}/api/stream/connection'));
-    return channel;
+    channel.stream
+        .map((event) => model.ConnectionMessage.fromJson(jsonDecode(event)))
+        .listen(
+      (msg) {
+        _state += msg;
+        notifyListeners();
+      },
+    );
+    _channel = channel;
   }
+
+  @override
+  void dispose() {
+    _channel?.sink.close();
+    super.dispose();
+  }
+
+  model.ConnectionState get state => _state;
 }

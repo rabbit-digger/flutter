@@ -28,12 +28,10 @@ class ConnectionState {
   final int totalUpload;
   @JsonKey(name: 'total_download')
   final int totalDownload;
-  final Map<String, Connection> connections;
+  final Map<String, Connection>? connections;
 
-  ConnectionState()
-      : totalUpload = 0,
-        totalDownload = 0,
-        connections = {};
+  ConnectionState(
+      {this.totalUpload = 0, this.totalDownload = 0, this.connections});
 
   factory ConnectionState.fromJson(Map<String, dynamic> json) =>
       _$ConnectionStateFromJson(json);

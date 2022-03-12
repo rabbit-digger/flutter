@@ -23,10 +23,20 @@ Map<String, dynamic> _$ConnectionMessageToJson(ConnectionMessage instance) =>
     };
 
 ConnectionState _$ConnectionStateFromJson(Map<String, dynamic> json) =>
-    ConnectionState();
+    ConnectionState(
+      totalUpload: json['total_upload'] as int? ?? 0,
+      totalDownload: json['total_download'] as int? ?? 0,
+      connections: (json['connections'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, Connection.fromJson(e as Map<String, dynamic>)),
+      ),
+    );
 
 Map<String, dynamic> _$ConnectionStateToJson(ConnectionState instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      'total_upload': instance.totalUpload,
+      'total_download': instance.totalDownload,
+      'connections': instance.connections,
+    };
 
 Connection _$ConnectionFromJson(Map<String, dynamic> json) => Connection(
       json['protocol'] as String,
