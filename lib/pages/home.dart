@@ -15,6 +15,10 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+String appendPerSec(String value) {
+  return '$value/s';
+}
+
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
@@ -47,14 +51,19 @@ class _HomePageState extends State<HomePage> {
                   NumberBoard.fileSize(
                       title: 'Total upload', size: conns.state.totalUpload),
                   NumberBoard.fileSize(
-                      title: 'Download speed',
-                      size: conns.summary.downloadPerSecond),
+                    title: 'Download speed',
+                    size: conns.summary.downloadPerSecond,
+                    unitFormatter: appendPerSec,
+                  ),
                   NumberBoard.fileSize(
-                      title: 'Upload speed',
-                      size: conns.summary.uploadPerSecond),
+                    title: 'Upload speed',
+                    size: conns.summary.uploadPerSecond,
+                    unitFormatter: appendPerSec,
+                  ),
                   NumberBoard(
-                      title: 'Connections',
-                      value: conns.summary.connectionCount.toString())
+                    title: 'Connections',
+                    value: conns.summary.connectionCount.toString(),
+                  )
                 ]),
             SizedBox(
               height: 400,

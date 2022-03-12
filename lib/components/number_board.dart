@@ -1,6 +1,8 @@
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 
+typedef Formatter = String Function(String value);
+
 class NumberBoard extends StatelessWidget {
   final String title;
   final String value;
@@ -14,7 +16,7 @@ class NumberBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(12),
             child: SizedBox(
                 width: 120,
                 child: Column(
@@ -36,13 +38,15 @@ class NumberBoard extends StatelessWidget {
                 ))));
   }
 
-  factory NumberBoard.fileSize({required int size, required String title}) {
+  factory NumberBoard.fileSize(
+      {required int size, required String title, Formatter? unitFormatter}) {
     final str = filesize(size);
     final list = str.split(' ');
+    final formatter = unitFormatter ?? (value) => value;
     return NumberBoard(
       title: title,
       value: list[0],
-      unit: list[1],
+      unit: formatter(list[1]),
     );
   }
 }
