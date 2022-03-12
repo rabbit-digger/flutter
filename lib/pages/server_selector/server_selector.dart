@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rdp_flutter/model.dart';
 
+import 'server_selector.i18n.dart';
+
 class ServerSelector extends StatefulWidget {
   const ServerSelector({Key? key, required this.builder}) : super(key: key);
   final Widget Function(ServerItem server) builder;
@@ -58,7 +60,7 @@ class ServerSelectorState extends State<ServerSelector> {
             child: widget.builder(selected))
         : Scaffold(
             appBar: AppBar(
-              title: const Text("Select a Server"),
+              title: Text("Select a Server".i18n),
             ),
             body: ListView.builder(
               itemCount: items.length,
@@ -68,7 +70,7 @@ class ServerSelectorState extends State<ServerSelector> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: _pushAddScreen,
-              tooltip: 'New Server',
+              tooltip: 'Add Server'.i18n,
               child: const Icon(Icons.add),
             ),
           );
@@ -97,7 +99,7 @@ class ServerSelectorState extends State<ServerSelector> {
   void _pushEditScreen(ServerItem i) async {
     await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
       return ServerForm(
-        title: const Text('Edit Server'),
+        title: Text('Edit Server'.i18n),
         formdata: i,
       );
     }));
@@ -107,29 +109,32 @@ class ServerSelectorState extends State<ServerSelector> {
   }
 
   void _pushAddScreen() async {
-    ServerItem i =
+    ServerItem? i =
         await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      return const ServerForm(title: Text('Add Server'));
+      return ServerForm(title: Text('Add Server'.i18n));
     }));
-    setState(() {
-      _servers?.add(i);
-    });
+    if (i != null) {
+      setState(() {
+        _servers?.add(i);
+      });
+    }
   }
 
   void _remove(ServerItem i) {
     AlertDialog alert = AlertDialog(
-      title: const Text("You are going to remove this server"),
-      content: Text(
-          "Are you sure to remove ${i.inlineDescription()}? This action cannot be undone."),
+      title: Text("Remove Server".i18n),
+      content: Text("Are you sure to remove %s? This action cannot be undone."
+          .i18n
+          .fill([i.inlineDescription()])),
       actions: [
         TextButton(
-          child: const Text("Cancel"),
+          child: Text("Cancel".i18n),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: const Text("Remove"),
+          child: Text("Remove".i18n),
           onPressed: () {
             setState(() {
               _servers?.remove(i);
@@ -185,7 +190,7 @@ class ServerFormState extends State<ServerForm> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.check),
-              tooltip: 'Add',
+              tooltip: 'Add'.i18n,
               onPressed: _submit,
             )
           ],
@@ -194,15 +199,15 @@ class ServerFormState extends State<ServerForm> {
             key: _formKey,
             child: Column(children: <Widget>[
               TextFormField(
-                decoration: const InputDecoration(
-                    labelText: 'Server URL',
+                decoration: InputDecoration(
+                    labelText: 'Server URL'.i18n,
                     hintText: 'http://127.0.0.1:8030',
-                    contentPadding: EdgeInsets.all(16.0),
-                    prefixIcon: Icon(Icons.language)),
+                    contentPadding: const EdgeInsets.all(16.0),
+                    prefixIcon: const Icon(Icons.language)),
                 autofocus: true,
                 validator: (value) {
                   if (value?.isEmpty ?? true) {
-                    return 'Please enter URL';
+                    return 'Please enter URL'.i18n;
                   }
                   return null;
                 },
@@ -210,20 +215,20 @@ class ServerFormState extends State<ServerForm> {
                 onSaved: (v) => formdata.url = v ?? '',
               ),
               TextFormField(
-                decoration: const InputDecoration(
-                    labelText: 'Description',
-                    hintText: 'Server1',
-                    contentPadding: EdgeInsets.all(16.0),
-                    prefixIcon: Icon(Icons.description)),
+                decoration: InputDecoration(
+                    labelText: 'Description'.i18n,
+                    hintText: 'Server1'.i18n,
+                    contentPadding: const EdgeInsets.all(16.0),
+                    prefixIcon: const Icon(Icons.description)),
                 initialValue: formdata.description,
                 onSaved: (v) => formdata.description = v ?? '',
               ),
               TextFormField(
-                decoration: const InputDecoration(
-                    labelText: 'Token',
-                    hintText: 'A very secret token',
-                    contentPadding: EdgeInsets.all(16.0),
-                    prefixIcon: Icon(Icons.lock)),
+                decoration: InputDecoration(
+                    labelText: 'Token'.i18n,
+                    hintText: 'A very secret token'.i18n,
+                    contentPadding: const EdgeInsets.all(16.0),
+                    prefixIcon: const Icon(Icons.lock)),
                 obscureText: true,
                 textInputAction: TextInputAction.done,
                 initialValue: formdata.token,
