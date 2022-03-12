@@ -6,13 +6,45 @@ part of 'model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+ConnectionMessage _$ConnectionMessageFromJson(Map<String, dynamic> json) =>
+    ConnectionMessage(
+      json['full'] == null
+          ? null
+          : ConnectionState.fromJson(json['full'] as Map<String, dynamic>),
+      (json['patch'] as List<dynamic>?)
+          ?.map((e) => e as Map<String, dynamic>)
+          .toList(),
+    );
+
+Map<String, dynamic> _$ConnectionMessageToJson(ConnectionMessage instance) =>
+    <String, dynamic>{
+      'full': instance.full,
+      'patch': instance.patch,
+    };
+
+ConnectionState _$ConnectionStateFromJson(Map<String, dynamic> json) =>
+    ConnectionState();
+
+Map<String, dynamic> _$ConnectionStateToJson(ConnectionState instance) =>
+    <String, dynamic>{};
+
 Connection _$ConnectionFromJson(Map<String, dynamic> json) => Connection(
-      json['id'] as String,
+      json['protocol'] as String,
+      json['addr'] as String,
+      json['start_time'] as int,
+      json['upload'] as int,
+      json['download'] as int,
+      json['ctx'] as Map<String, dynamic>,
     );
 
 Map<String, dynamic> _$ConnectionToJson(Connection instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'protocol': instance.protocol,
+      'addr': instance.addr,
+      'start_time': instance.startTime,
+      'upload': instance.upload,
+      'download': instance.download,
+      'ctx': instance.ctx,
     };
 
 ServerItem _$ServerItemFromJson(Map<String, dynamic> json) => ServerItem(

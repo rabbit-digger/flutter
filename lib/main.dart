@@ -21,12 +21,10 @@ class App extends StatelessWidget {
         theme: ThemeData(primarySwatch: Colors.blue),
         debugShowCheckedModeBanner: false,
         home: ServerSelector(
-          builder: (server) => ChangeNotifierProvider(
-              create: (context) => RDPModel(server: server),
-              child: Consumer<RDPModel>(
-                builder: (context, value, child) =>
-                    HomePage(title: value.server.inlineDescription()),
-              )),
+          builder: (server) => RDPProvider(
+            server: server,
+            child: HomePage(title: server.inlineDescription()),
+          ),
         ));
   }
 }
