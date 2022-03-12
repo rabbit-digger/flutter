@@ -6,6 +6,8 @@ import 'package:rdp_flutter/components/number_board.dart';
 import 'package:rdp_flutter/provider/rdp_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import 'dashboard.i18n.dart';
+
 class Dashboard extends StatelessWidget {
   const Dashboard({Key? key}) : super(key: key);
 
@@ -19,21 +21,21 @@ class Dashboard extends StatelessWidget {
           crossAxisAlignment: WrapCrossAlignment.start,
           children: <Widget>[
             NumberBoard.fileSize(
-                title: 'Total download', size: conns.state.totalDownload),
+                title: 'Total download'.i18n, size: conns.state.totalDownload),
             NumberBoard.fileSize(
-                title: 'Total upload', size: conns.state.totalUpload),
+                title: 'Total upload'.i18n, size: conns.state.totalUpload),
             NumberBoard.fileSize(
-              title: 'Download speed',
+              title: 'Download speed'.i18n,
               size: conns.summary.downloadPerSecond,
               unitFormatter: appendPerSec,
             ),
             NumberBoard.fileSize(
-              title: 'Upload speed',
+              title: 'Upload speed'.i18n,
               size: conns.summary.uploadPerSecond,
               unitFormatter: appendPerSec,
             ),
             NumberBoard(
-              title: 'Connections',
+              title: 'Connections'.i18n,
               value: conns.summary.connectionCount.toString(),
             )
           ],
@@ -72,7 +74,7 @@ class Dashboard extends StatelessWidget {
 List<AreaSeries<RDPSummary, num>> seriesList(RDPConnections conns) {
   return [
     AreaSeries<RDPSummary, int>(
-      legendItemText: 'Download',
+      legendItemText: 'Download speed'.i18n,
       xValueMapper: (summary, i) => conns.count + i - 60,
       yValueMapper: (summary, _) => summary.downloadPerSecond,
       dataSource: conns.lastMinute,
@@ -80,7 +82,7 @@ List<AreaSeries<RDPSummary, num>> seriesList(RDPConnections conns) {
       color: const Color.fromARGB(128, 23, 93, 159),
     ),
     AreaSeries<RDPSummary, int>(
-      legendItemText: 'Upload',
+      legendItemText: 'Upload speed'.i18n,
       xValueMapper: (summary, i) => conns.count + i - 60,
       yValueMapper: (summary, _) => summary.uploadPerSecond,
       dataSource: conns.lastMinute,
