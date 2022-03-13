@@ -23,6 +23,7 @@ class ColumnDefinition<T> {
   final Alignment alignment;
   final ColumnWidthMode columnWidthMode;
   final double width;
+  final double minimumWidth;
 
   const ColumnDefinition({
     required this.columnName,
@@ -32,6 +33,7 @@ class ColumnDefinition<T> {
     this.columnWidthMode = ColumnWidthMode.none,
     this.formatter = defaultFormatter,
     this.width = double.nan,
+    this.minimumWidth = double.nan,
   });
 }
 
@@ -101,50 +103,50 @@ class _ConnectionViewState extends State<ConnectionView> {
         label: 'Download'.i18n,
         value: (i) => i.download,
         formatter: (i) => filesize(i),
-        width: 120,
+        minimumWidth: 120,
       ),
       ColumnDefinition(
         columnName: 'upload',
         label: 'Upload'.i18n,
         value: (i) => i.upload,
         formatter: (i) => filesize(i),
-        width: 120,
+        minimumWidth: 120,
       ),
       ColumnDefinition(
         columnName: 'downloadSpeed',
         label: 'Download Speed'.i18n,
         value: (i) => i.downloadSpeed,
         formatter: (i) => filesize(i) + '/s',
-        width: 120,
+        minimumWidth: 120,
       ),
       ColumnDefinition(
         columnName: 'uploadSpeed',
         label: 'Upload Speed'.i18n,
         value: (i) => i.uploadSpeed,
         formatter: (i) => filesize(i) + '/s',
-        width: 120,
+        minimumWidth: 120,
       ),
       ColumnDefinition(
-        columnName: 'startTime',
-        label: 'Start Time'.i18n,
-        value: (i) => i.startTime,
-        width: 120,
-        formatter: (i) {
-          var now =
-              (DateTime.now().toUtc().millisecondsSinceEpoch / 1000).round();
-          return prettyDuration(
-            Duration(
-              seconds: now - i as int,
-            ),
-            abbreviated: true,
-            tersity: DurationTersity.minute,
-            upperTersity: DurationTersity.day,
-            locale: DurationLocale.fromLanguageCode(
-                    _locale?.languageCode ?? 'en') ??
-                const EnglishDurationLocale(),
-          );
-        },
-      ),
+          columnName: 'startTime',
+          label: 'Start Time'.i18n,
+          value: (i) => i.startTime,
+          minimumWidth: 120,
+          formatter: (i) {
+            var now =
+                (DateTime.now().toUtc().millisecondsSinceEpoch / 1000).round();
+            var readable = prettyDuration(
+              Duration(
+                seconds: now - i as int,
+              ),
+              abbreviated: true,
+              tersity: DurationTersity.minute,
+              upperTersity: DurationTersity.day,
+              locale: DurationLocale.fromLanguageCode(
+                      _locale?.languageCode ?? 'en') ??
+                  const EnglishDurationLocale(),
+            );
+            return '%s ago'.i18n.fill([readable]);
+          }),
       ColumnDefinition(
         columnName: 'source',
         label: 'Source Address'.i18n,
@@ -177,6 +179,7 @@ class _ConnectionViewState extends State<ConnectionView> {
             columnName: c.columnName,
             columnWidthMode: c.columnWidthMode,
             width: c.width,
+            minimumWidth: c.minimumWidth,
             autoFitPadding: const EdgeInsets.all(8),
             label: Container(
               padding: const EdgeInsets.all(8),
