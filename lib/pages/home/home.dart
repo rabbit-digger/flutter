@@ -19,17 +19,17 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Dashboard(),
-    Text(
+  static final List<Widget> _widgetOptions = <Widget>[
+    const Dashboard(),
+    const Text(
       'Select',
       style: optionStyle,
     ),
-    Text(
+    const Text(
       'Config',
       style: optionStyle,
     ),
-    ConnectionView(),
+    const ConnectionView(),
   ];
 
   void _onItemTapped(int index) {

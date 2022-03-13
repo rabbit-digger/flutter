@@ -50,6 +50,17 @@ class ConnectionState {
   }
 }
 
+class ConnContext {
+  final Map<String, dynamic> ctx;
+
+  const ConnContext(this.ctx);
+
+  String? get srcSocketAddr => ctx['src_socket_addr'];
+  String? get destSocketAddr => ctx['dest_socket_addr'];
+  String? get destDomain => ctx['dest_domain'];
+  List<String> get netList => ctx['net_list'] ?? [];
+}
+
 @JsonSerializable()
 class Connection {
   final String protocol;
@@ -58,6 +69,7 @@ class Connection {
   final int startTime;
   final int upload;
   final int download;
+  @JsonKey(name: 'ctx')
   final Map<String, dynamic> ctx;
 
   Connection(this.protocol, this.addr, this.startTime, this.upload,
@@ -67,6 +79,10 @@ class Connection {
       _$ConnectionFromJson(json);
 
   Map<String, dynamic> toJson() => _$ConnectionToJson(this);
+
+  ConnContext get context => ConnContext(ctx);
+  String get targetAddress => context.destDomain ?? addr;
+  String get srcAddress => context.srcSocketAddr ?? 'N/A';
 }
 
 @JsonSerializable()

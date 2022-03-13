@@ -6,6 +6,8 @@ import 'package:rdp_flutter/model.dart' as model;
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+export 'package:rdp_flutter/model.dart';
+
 enum RDPState {
   connecting,
   connected,
