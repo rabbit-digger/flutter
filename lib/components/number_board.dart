@@ -15,27 +15,28 @@ class NumberBoard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        child: Container(
-            padding: const EdgeInsets.all(12),
-            child: SizedBox(
-                width: 120,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: Theme.of(context).textTheme.caption),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(value,
-                            style: Theme.of(context).textTheme.headline6),
-                        const SizedBox(width: 8),
-                        Text(unit ?? '',
-                            style: Theme.of(context).textTheme.headline6)
-                      ],
-                    ),
-                  ],
-                ))));
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        child: SizedBox(
+          width: 120,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: Theme.of(context).textTheme.caption),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(value, style: Theme.of(context).textTheme.headline6),
+                  const SizedBox(width: 8),
+                  Text(unit ?? '', style: Theme.of(context).textTheme.headline6)
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   factory NumberBoard.fileSize(

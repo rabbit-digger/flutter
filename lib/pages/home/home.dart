@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:rdp_flutter/pages/home/tabs/select.dart';
 import 'package:rdp_flutter/pages/server_selector/server_selector.dart';
 
 import 'home.i18n.dart';
@@ -20,11 +21,8 @@ class _HomePageState extends State<HomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
-    const Dashboard(),
-    const Text(
-      'Select',
-      style: optionStyle,
-    ),
+    const DashboardView(),
+    const SelectView(),
     const Text(
       'Config',
       style: optionStyle,

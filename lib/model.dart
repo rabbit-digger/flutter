@@ -89,6 +89,58 @@ class Connection {
 }
 
 @JsonSerializable()
+class SelectNet {
+  List<String> list;
+  String selected;
+
+  SelectNet({required this.list, required this.selected});
+
+  factory SelectNet.fromJson(Map<String, dynamic> json) =>
+      _$SelectNetFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SelectNetToJson(this);
+}
+
+Map<String, dynamic> _omitKey(Map<String, dynamic> json, List<String> keys) {
+  return Map.fromEntries(json.entries.where((e) => !keys.contains(e.key)));
+}
+
+typedef NetFactory<T> = T Function(Map<String, dynamic> json);
+
+class RDPConfigItem {
+  String type;
+  Map<String, dynamic> opt;
+
+  RDPConfigItem(this.type, this.opt);
+
+  factory RDPConfigItem.fromJson(Map<String, dynamic> json) =>
+      RDPConfigItem(json['type'] as String, _omitKey(json, ['type']));
+
+  Map<String, dynamic> toJson() => {
+        ...opt,
+        'type': type,
+      };
+
+  T toNet<T>(NetFactory<T> factory) {
+    return factory(opt);
+  }
+}
+
+@JsonSerializable()
+class RDPConfig {
+  String? id;
+  Map<String, RDPConfigItem>? net;
+  Map<String, RDPConfigItem>? server;
+
+  RDPConfig({this.net, this.server});
+
+  factory RDPConfig.fromJson(Map<String, dynamic> json) =>
+      _$RDPConfigFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RDPConfigToJson(this);
+}
+
+@JsonSerializable()
 class ServerItem {
   String? description;
   String url;

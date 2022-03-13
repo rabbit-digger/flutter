@@ -8,8 +8,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import 'dashboard.i18n.dart';
 
-class Dashboard extends StatelessWidget {
-  const Dashboard({Key? key}) : super(key: key);
+class DashboardView extends StatelessWidget {
+  const DashboardView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,17 +1,25 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:rdp_flutter/model.dart' as model;
 import 'package:rxdart/rxdart.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+import 'package:http/http.dart' as http;
 
 export 'package:rdp_flutter/model.dart';
 
-enum RDPState {
+enum RDPChannelState {
   connecting,
   connected,
   disconnected,
+  error,
+}
+
+enum RDPAPIState {
+  fetching,
+  fetched,
   error,
 }
 
@@ -24,8 +32,17 @@ class RDPProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => RDPConnections(server: server), child: child);
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => RDPConnections(server: server),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => RDPConfig(server: server),
+        ),
+      ],
+      child: child,
+    );
   }
 }
 
@@ -44,10 +61,64 @@ class RDPSummary {
       this.connectionCount = 0});
 }
 
+class RDPConfig extends ChangeNotifier {
+  final model.ServerItem server;
+  model.RDPConfig? _config;
+
+  RDPAPIState _apiState = RDPAPIState.fetching;
+
+  RDPConfig({required this.server}) : super() {
+    _request();
+  }
+
+  Future<void> refetch() async {
+    await _request();
+  }
+
+  Map<String, model.RDPConfigItem> queryNet({String? type}) {
+    final net = _config?.net ?? {};
+    if (type == null) {
+      return net;
+    }
+    return Map.fromEntries(net.entries.where((e) => e.value.type == type));
+  }
+
+  Map<String, model.RDPConfigItem> queryServer({String? type}) {
+    final server = _config?.server ?? {};
+    if (type == null) {
+      return server;
+    }
+    return Map.fromEntries(server.entries.where((e) => e.value.type == type));
+  }
+
+  Future<void> _request() async {
+    try {
+      _apiState = RDPAPIState.fetching;
+
+      final resp = await http.get(Uri.parse('${server.url}/api/config'));
+      final config =
+          model.RDPConfig.fromJson(jsonDecode(utf8.decode(resp.bodyBytes)));
+
+      _config = config;
+      _apiState = RDPAPIState.fetched;
+      notifyListeners();
+    } catch (e) {
+      if (kDebugMode) {
+        print('request error: $e');
+      }
+      _apiState = RDPAPIState.error;
+    }
+  }
+
+  model.RDPConfig? get config => _config;
+  RDPAPIState get apiState => _apiState;
+}
+
 class RDPConnections extends ChangeNotifier {
   final model.ServerItem server;
+
   int _count = 0;
-  RDPState _channesState = RDPState.connecting;
+  RDPChannelState _channelState = RDPChannelState.connecting;
   WebSocketChannel? _channel;
   model.ConnectionState? _lastState;
   model.ConnectionState _state = model.ConnectionState();
@@ -64,7 +135,7 @@ class RDPConnections extends ChangeNotifier {
         .listen(
       (state) {
         _count += 1;
-        _channesState = RDPState.connected;
+        _channelState = RDPChannelState.connected;
         _lastState = _lastState == null ? state : _state;
         _state = state;
 
@@ -77,11 +148,11 @@ class RDPConnections extends ChangeNotifier {
     );
 
     sub.onDone(() {
-      _channesState = RDPState.disconnected;
+      _channelState = RDPChannelState.disconnected;
       notifyListeners();
     });
     sub.onError((e) {
-      _channesState = RDPState.error;
+      _channelState = RDPChannelState.error;
       notifyListeners();
     });
 
@@ -95,7 +166,7 @@ class RDPConnections extends ChangeNotifier {
   }
 
   List<RDPSummary> get lastMinute => _lastMinute;
-  RDPState get channelState => _channesState;
+  RDPChannelState get channelState => _channelState;
 
   int get count => _count;
   model.ConnectionState? get lastState => _lastState;
