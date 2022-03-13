@@ -18,7 +18,7 @@ class NumberBoard extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         child: SizedBox(
-          width: 120,
+          width: 150,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

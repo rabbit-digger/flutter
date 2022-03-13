@@ -21,12 +21,14 @@ class NetTile extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
+          alignment: Alignment.centerLeft,
           padding: const EdgeInsets.all(8),
           constraints: const BoxConstraints(
-              minWidth: 120,
-              maxWidth: 180,
-              minHeight: height,
-              maxHeight: height),
+            minWidth: 120,
+            maxWidth: 180,
+            minHeight: height,
+            maxHeight: height,
+          ),
           child: Text(
             title,
             maxLines: 2,
