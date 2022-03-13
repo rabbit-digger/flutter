@@ -14,60 +14,60 @@ class SelectView extends StatefulWidget {
 }
 
 class _SelectViewState extends State<SelectView> {
-  final Map<int, bool> _expanded = {};
-
+  RDPConfig? _config;
   @override
   Widget build(BuildContext context) {
     final config = context.watch<RDPConfig>();
+    _config = config;
     final selectNet = config
         .queryNet(type: 'select')
         .mapValue((i) => i.toNet(SelectNet.fromJson));
 
     return CommonPageView(
       children: <Widget>[
-        ExpansionPanelList(
-          expansionCallback: (int index, bool isExpanded) {
-            _toggleExpanded(index, isExpanded: isExpanded);
-          },
-          children: selectNet.entries.mapIndexed((index, e) {
-            return ExpansionPanel(
-              canTapOnHeader: true,
-              headerBuilder: (BuildContext context, bool isExpanded) {
-                return ListTile(
-                  title: Text(e.key),
-                );
-              },
-              body: SizedBox(
-                  width: double.infinity,
-                  child: PanelBody(key: ValueKey(index), net: e.value)),
-              isExpanded: _expanded[index] ?? false,
-            );
-          }).toList(),
-        ),
+        ...selectNet.entries.mapIndexed((index, e) {
+          return ExpansionTile(
+            title: Text(e.key),
+            subtitle: Text(e.value.selected),
+            children: [
+              PanelBody(
+                  key: ValueKey(index),
+                  net: e.value,
+                  onSelect: (select) => _onSelect(e.key, select))
+            ],
+          );
+        })
       ],
     );
   }
 
-  void _toggleExpanded(int index, {bool? isExpanded}) {
-    setState(() {
-      _expanded[index] = !(_expanded[index] ?? false);
-    });
+  void _onSelect(String net, String select) async {
+    await _config?.setSelect(net, select);
   }
 }
 
 class PanelBody extends StatelessWidget {
   final SelectNet net;
+  final void Function(String)? onSelect;
 
-  const PanelBody({Key? key, required this.net}) : super(key: key);
+  const PanelBody({Key? key, required this.net, this.onSelect})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      crossAxisAlignment: WrapCrossAlignment.start,
-      children: net.list
-          .map((i) =>
-              NetTile(key: ValueKey(i), title: i, active: i == net.selected))
-          .toList(),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      width: double.infinity,
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.start,
+        children: net.list
+            .map((i) => NetTile(
+                key: ValueKey(i),
+                title: i,
+                active: i == net.selected,
+                onTap: () => onSelect?.call(i)))
+            .toList(),
+      ),
     );
   }
 }

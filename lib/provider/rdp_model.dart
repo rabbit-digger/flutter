@@ -110,6 +110,16 @@ class RDPConfig extends ChangeNotifier {
     }
   }
 
+  Future<void> setSelect(String net, String select) async {
+    await http.post(
+        Uri.parse('${server.url}/api/net/${Uri.encodeComponent(net)}'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'selected': select,
+        }));
+    await refetch();
+  }
+
   model.RDPConfig? get config => _config;
   RDPAPIState get apiState => _apiState;
 }
