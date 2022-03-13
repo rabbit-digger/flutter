@@ -15,6 +15,14 @@ extension Localization on String {
         'zh_cn': '上传',
       } +
       {
+        'en_us': 'Download Speed',
+        'zh_cn': '下载速度',
+      } +
+      {
+        'en_us': 'Upload Speed',
+        'zh_cn': '上传速度',
+      } +
+      {
         'en_us': 'Start Time',
         'zh_cn': '开始时间',
       } +

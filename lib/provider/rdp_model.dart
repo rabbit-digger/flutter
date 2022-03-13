@@ -98,6 +98,7 @@ class RDPConnections extends ChangeNotifier {
   RDPState get channelState => _channesState;
 
   int get count => _count;
+  model.ConnectionState? get lastState => _lastState;
   model.ConnectionState get state => _state;
   RDPSummary get summary => RDPSummary(
       downloadPerSecond: _lastState != null
