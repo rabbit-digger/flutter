@@ -58,7 +58,10 @@ class ConnContext {
   String? get srcSocketAddr => ctx['src_socket_addr'];
   String? get destSocketAddr => ctx['dest_socket_addr'];
   String? get destDomain => ctx['dest_domain'];
-  List<String> get netList => ctx['net_list'] ?? [];
+  List<String> get netList {
+    final netList = ctx['net_list'] as List<dynamic>? ?? [];
+    return netList.map((e) => e.toString()).toList();
+  }
 }
 
 @JsonSerializable()

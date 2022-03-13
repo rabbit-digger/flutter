@@ -18,3 +18,17 @@ class CommonPageView extends StatelessWidget {
     );
   }
 }
+
+class FillPageView extends StatelessWidget {
+  final Widget child;
+
+  const FillPageView({Key? key, required this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: child,
+    );
+  }
+}
