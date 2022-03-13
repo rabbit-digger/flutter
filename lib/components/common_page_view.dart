@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rdp_flutter/utils/is_tablet.dart';
 
 class CommonPageView extends StatelessWidget {
   final List<Widget> children;
@@ -9,7 +10,7 @@ class CommonPageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(context.isTablet ? 16 : 4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: children,
@@ -27,7 +28,7 @@ class FillPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(context.isTablet ? 16 : 4),
       child: child,
     );
   }
