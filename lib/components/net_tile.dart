@@ -17,23 +17,25 @@ class NetTile extends StatelessWidget {
         ? theme.colorScheme.primary
         : theme.textTheme.bodyMedium!.color;
 
-    return Card(
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.all(8),
-          constraints: const BoxConstraints(
-            minWidth: 120,
-            maxWidth: 160,
-            minHeight: height,
-            maxHeight: height,
-          ),
-          child: Text(
-            title,
-            maxLines: 2,
-            overflow: TextOverflow.fade,
-            style: TextStyle(color: color),
+    return Container(
+      constraints: const BoxConstraints(
+        minWidth: 120,
+        maxWidth: 160,
+        minHeight: height,
+        maxHeight: height,
+      ),
+      child: Card(
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.all(8),
+            child: Text(
+              title,
+              maxLines: 2,
+              overflow: TextOverflow.fade,
+              style: TextStyle(color: color),
+            ),
           ),
         ),
       ),

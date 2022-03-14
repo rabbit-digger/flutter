@@ -132,6 +132,7 @@ class RDPConnections extends ChangeNotifier {
   model.ConnectionState _state = model.ConnectionState();
   List<RDPSummary> _lastMinute =
       List.filled(60, const RDPSummary(), growable: true);
+  bool _disposed = false;
 
   RDPConnections({required this.server}) : super() {
     connect();
@@ -142,6 +143,7 @@ class RDPConnections extends ChangeNotifier {
     final completer = Completer<void>();
 
     _channelState = RDPChannelState.connecting;
+    myNotify();
 
     if (_channel != null) {
       _channel!.sink.close();
@@ -169,7 +171,7 @@ class RDPConnections extends ChangeNotifier {
             while (_lastMinute.length > 60) {
               _lastMinute.removeAt(0);
             }
-            notifyListeners();
+            myNotify();
           },
           onDone: _onDone,
           onError: (e) {
@@ -185,6 +187,13 @@ class RDPConnections extends ChangeNotifier {
     return completer.future;
   }
 
+  void myNotify() {
+    if (_disposed) {
+      return;
+    }
+    notifyListeners();
+  }
+
   void _reset() {
     _count = 0;
     _channelState = RDPChannelState.disconnected;
@@ -194,21 +203,26 @@ class RDPConnections extends ChangeNotifier {
     _lastState = null;
     _state = model.ConnectionState();
     _lastMinute = List.filled(60, const RDPSummary(), growable: true);
+
+    myNotify();
   }
 
   void _onDone() {
     _channelState = RDPChannelState.disconnected;
-    notifyListeners();
+    myNotify();
+    connect();
   }
 
   void _onError(e) {
     _channelState = RDPChannelState.error;
-    notifyListeners();
+    myNotify();
+    connect();
   }
 
   @override
   void dispose() {
     _reset();
+    _disposed = true;
     super.dispose();
   }
 
