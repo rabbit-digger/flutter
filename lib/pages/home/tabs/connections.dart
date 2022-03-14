@@ -61,7 +61,7 @@ class RowData {
 
   factory RowData.fromConn(model.Connection conn, model.Connection? last) {
     return RowData(
-      address: conn.addr,
+      address: conn.targetAddress,
       download: conn.download,
       upload: conn.upload,
       downloadSpeed: last == null ? 0 : (conn.download - last.download),
