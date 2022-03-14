@@ -8,7 +8,7 @@
 PRODUCT_NAME = rdp_flutter
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.rdpFlutter
+PRODUCT_BUNDLE_IDENTIFIER = com.rabbit-digger.rdpFlutter
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2022 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2022 com.rabbit-digger. All rights reserved.

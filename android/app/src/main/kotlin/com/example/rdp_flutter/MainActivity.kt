@@ -1,4 +1,4 @@
-package com.example.rdp_flutter
+package com.rabbit-digger.rdp_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
