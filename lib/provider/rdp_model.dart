@@ -137,7 +137,7 @@ class RDPConnections extends ChangeNotifier {
 
   RDPConnections({required this.server}) : super() {
     final channel = WebSocketChannel.connect(Uri.parse(
-        '${server.url.replaceFirst('http', 'ws')}/api/stream/connection'));
+        '${server.url.replaceFirst('http', 'ws')}/api/stream/connection?patch=true'));
     final sub = channel.stream
         .map((event) => model.ConnectionMessage.fromJson(jsonDecode(event)))
         .scan((model.ConnectionState state, i, _) => state + i,
