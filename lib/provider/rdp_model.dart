@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -18,6 +19,7 @@ enum RDPChannelState {
 }
 
 enum RDPAPIState {
+  idle,
   fetching,
   fetched,
   error,
@@ -65,14 +67,10 @@ class RDPConfig extends ChangeNotifier {
   final model.ServerItem server;
   model.RDPConfig? _config;
 
-  RDPAPIState _apiState = RDPAPIState.fetching;
+  RDPAPIState _apiState = RDPAPIState.idle;
 
   RDPConfig({required this.server}) : super() {
-    _request();
-  }
-
-  Future<void> refetch() async {
-    await _request();
+    refetch();
   }
 
   Map<String, model.RDPConfigItem> queryNet({String? type}) {
@@ -91,7 +89,7 @@ class RDPConfig extends ChangeNotifier {
     return Map.fromEntries(server.entries.where((e) => e.value.type == type));
   }
 
-  Future<void> _request() async {
+  Future<void> refetch() async {
     try {
       _apiState = RDPAPIState.fetching;
 
@@ -128,50 +126,89 @@ class RDPConnections extends ChangeNotifier {
   final model.ServerItem server;
 
   int _count = 0;
-  RDPChannelState _channelState = RDPChannelState.connecting;
+  RDPChannelState _channelState = RDPChannelState.disconnected;
   WebSocketChannel? _channel;
   model.ConnectionState? _lastState;
   model.ConnectionState _state = model.ConnectionState();
-  final List<RDPSummary> _lastMinute =
+  List<RDPSummary> _lastMinute =
       List.filled(60, const RDPSummary(), growable: true);
 
   RDPConnections({required this.server}) : super() {
+    connect();
+  }
+
+  Future<void> connect() {
+    _reset();
+    final completer = Completer<void>();
+
+    _channelState = RDPChannelState.connecting;
+
+    if (_channel != null) {
+      _channel!.sink.close();
+    }
+
     final channel = WebSocketChannel.connect(Uri.parse(
         '${server.url.replaceFirst('http', 'ws')}/api/stream/connection?patch=true'));
-    final sub = channel.stream
+
+    channel.stream
         .map((event) => model.ConnectionMessage.fromJson(jsonDecode(event)))
         .scan((model.ConnectionState state, i, _) => state + i,
             model.ConnectionState())
         .listen(
-      (state) {
-        _count += 1;
-        _channelState = RDPChannelState.connected;
-        _lastState = _lastState == null ? state : _state;
-        _state = state;
+          (state) {
+            if (!completer.isCompleted) {
+              completer.complete();
+            }
 
-        _lastMinute.add(summary);
-        while (_lastMinute.length > 60) {
-          _lastMinute.removeAt(0);
-        }
-        notifyListeners();
-      },
-    );
+            _count += 1;
+            _channelState = RDPChannelState.connected;
+            _lastState = _lastState == null ? state : _state;
+            _state = state;
 
-    sub.onDone(() {
-      _channelState = RDPChannelState.disconnected;
-      notifyListeners();
-    });
-    sub.onError((e) {
-      _channelState = RDPChannelState.error;
-      notifyListeners();
-    });
+            _lastMinute.add(summary);
+            while (_lastMinute.length > 60) {
+              _lastMinute.removeAt(0);
+            }
+            notifyListeners();
+          },
+          onDone: _onDone,
+          onError: (e) {
+            _onError(e);
+            if (!completer.isCompleted) {
+              completer.completeError(e);
+            }
+          },
+        );
 
     _channel = channel;
+
+    return completer.future;
+  }
+
+  void _reset() {
+    _count = 0;
+    _channelState = RDPChannelState.disconnected;
+    _channel?.sink.close();
+    _channel = null;
+
+    _lastState = null;
+    _state = model.ConnectionState();
+    _lastMinute = List.filled(60, const RDPSummary(), growable: true);
+  }
+
+  void _onDone() {
+    _channelState = RDPChannelState.disconnected;
+    notifyListeners();
+  }
+
+  void _onError(e) {
+    _channelState = RDPChannelState.error;
+    notifyListeners();
   }
 
   @override
   void dispose() {
-    _channel?.sink.close();
+    _reset();
     super.dispose();
   }
 

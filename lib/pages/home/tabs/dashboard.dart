@@ -16,6 +16,7 @@ class DashboardView extends StatelessWidget {
     final conns = context.watch<RDPConnections>();
 
     return CommonPageView(
+      onFetch: conns.connect,
       children: <Widget>[
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.start,

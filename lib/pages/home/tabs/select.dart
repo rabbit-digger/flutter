@@ -24,6 +24,7 @@ class _SelectViewState extends State<SelectView> {
         .mapValue((i) => i.toNet(SelectNet.fromJson));
 
     return CommonPageView(
+      onFetch: config.refetch,
       children: <Widget>[
         ...selectNet.entries.mapIndexed((index, e) {
           return ExpansionTile(

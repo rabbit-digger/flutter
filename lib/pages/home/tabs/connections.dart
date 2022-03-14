@@ -48,16 +48,17 @@ class RowData {
   final String destIp;
   final String serverProtocol;
 
-  RowData(
-      {required this.address,
-      required this.download,
-      required this.upload,
-      required this.downloadSpeed,
-      required this.uploadSpeed,
-      required this.startTime,
-      required this.source,
-      required this.destIp,
-      required this.serverProtocol});
+  RowData({
+    required this.address,
+    required this.download,
+    required this.upload,
+    required this.downloadSpeed,
+    required this.uploadSpeed,
+    required this.startTime,
+    required this.source,
+    required this.destIp,
+    required this.serverProtocol,
+  });
 
   factory RowData.fromConn(model.Connection conn, model.Connection? last) {
     return RowData(

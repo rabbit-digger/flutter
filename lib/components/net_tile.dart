@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const double height = 80;
+const double height = 70;
 
 class NetTile extends StatelessWidget {
   final String title;
@@ -25,7 +25,7 @@ class NetTile extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           constraints: const BoxConstraints(
             minWidth: 120,
-            maxWidth: 180,
+            maxWidth: 160,
             minHeight: height,
             maxHeight: height,
           ),
