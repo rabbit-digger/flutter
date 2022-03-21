@@ -14,6 +14,9 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final conns = context.watch<RDPConnections>();
+    if (conns.channelState == RDPChannelState.connecting) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return CommonPageView(
       onFetch: conns.connect,

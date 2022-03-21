@@ -196,6 +196,12 @@ class _ConnectionViewState extends State<ConnectionView> {
 
   @override
   Widget build(BuildContext context) {
+    final conns = context.watch<model.RDPConnections>();
+
+    if (conns.channelState == model.RDPChannelState.connecting) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return FillPageView(
       child: SfDataGrid(
         columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,

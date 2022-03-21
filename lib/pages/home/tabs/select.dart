@@ -17,6 +17,9 @@ class _SelectViewState extends State<SelectView> {
   @override
   Widget build(BuildContext context) {
     final config = context.watch<RDPConfig>();
+    if (config.config == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
     _config = config;
     final selectNet = config
         .queryNet(type: 'select')

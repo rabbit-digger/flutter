@@ -51,6 +51,13 @@ class ServerSelectorState extends State<ServerSelector> {
 
   @override
   Widget build(BuildContext context) {
+    if (_servers == null) {
+      return Scaffold(
+          appBar: AppBar(
+            title: Text("Select a Server".i18n),
+          ),
+          body: const Center(child: CircularProgressIndicator()));
+    }
     final items = _servers?.items ?? [];
     final selected = _servers?.getSelected();
 
