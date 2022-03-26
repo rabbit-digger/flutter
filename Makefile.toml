@@ -1,0 +1,23 @@
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+CARGO_MAKE_WORKSPACE_EMULATION = true
+CARGO_MAKE_CRATE_WORKSPACE_MEMBERS = ["rdp/rabbit-digger-pro/ffi"]
+# TARGET_OS = "unknown"
+DEV = true
+RELEASE = false
+
+[tasks.test-flow]
+disabled = true
+
+[env.release]
+RELEASE = true
+DEV = false
+LIB_OUT_DIR = "release"
+
+[tasks.android]
+command = "cargo"
+args = ["ndk"]
+
+[tasks.build]
+args = ["build"]
+dependencies = ["android"]

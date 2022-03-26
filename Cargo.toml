@@ -1,0 +1,9 @@
+[workspace]
+members = ["rdp/*"]
+
+exclude = ["rdp/rabbit-digger-pro"]
+
+[profile.release]
+lto = true
+codegen-units = 1
+debug = true
