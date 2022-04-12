@@ -57,6 +57,10 @@ extension Localization on String {
       {
         'en_us': 'A very secret token',
         'zh_cn': '一个非常机密的令牌',
+      } +
+      {
+        'en_us': 'No server. Add one?',
+        'zh_cn': '没有服务器，新增一个吗？',
       };
   String get i18n => localize(this, _t);
 

@@ -69,12 +69,16 @@ class ServerSelectorState extends State<ServerSelector> {
             appBar: AppBar(
               title: Text("Select a Server".i18n),
             ),
-            body: ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return _buildItem(items[index]);
-              },
-            ),
+            body: items.isEmpty
+                ? Center(
+                    child: Text("No server. Add one?".i18n),
+                  )
+                : ListView.builder(
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return _buildItem(items[index]);
+                    },
+                  ),
             floatingActionButton: FloatingActionButton(
               onPressed: _pushAddScreen,
               tooltip: 'Add Server'.i18n,
