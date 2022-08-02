@@ -41,11 +41,11 @@ dependencies:
   json_patch: ^3.0.0
   json_annotation: ^4.4.0
   rxdart: ^0.27.3
-  syncfusion_flutter_charts: ^19.4.55
+  syncfusion_flutter_charts: ^20.2.40
+  syncfusion_flutter_datagrid: ^20.2.40
   filesize: ^2.0.1
-  i18n_extension: ^4.2.1
+  i18n_extension: ^5.0.0
   duration: ^3.0.11
-  syncfusion_flutter_datagrid: ^19.4.55
   http: ^0.13.4
 
 dev_dependencies:
@@ -57,7 +57,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
   build_runner: ^2.0.0
   json_serializable: ^6.0.0
 
