@@ -117,14 +117,14 @@ class _ConnectionViewState extends State<ConnectionView> {
         columnName: 'downloadSpeed',
         label: 'Download Speed'.i18n,
         value: (i) => i.downloadSpeed,
-        formatter: (i) => filesize(i) + '/s',
+        formatter: (i) => '${filesize(i)}/s',
         minimumWidth: 120,
       ),
       ColumnDefinition(
         columnName: 'uploadSpeed',
         label: 'Upload Speed'.i18n,
         value: (i) => i.uploadSpeed,
-        formatter: (i) => filesize(i) + '/s',
+        formatter: (i) => '${filesize(i)}/s',
         minimumWidth: 120,
       ),
       ColumnDefinition(
