@@ -22,14 +22,14 @@ class NumberBoard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: Theme.of(context).textTheme.caption),
+              Text(title, style: Theme.of(context).textTheme.bodySmall),
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(value, style: Theme.of(context).textTheme.headline6),
+                  Text(value, style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(width: 8),
-                  Text(unit ?? '', style: Theme.of(context).textTheme.headline6)
+                  Text(unit ?? '', style: Theme.of(context).textTheme.titleLarge)
                 ],
               ),
             ],
