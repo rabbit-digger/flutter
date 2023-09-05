@@ -61,7 +61,7 @@ class DashboardView extends StatelessWidget {
                   ChartAxisLabel('${filesize(i.value.round())}/s', null),
             ),
             series: seriesList(conns),
-            legend: Legend(
+            legend: const Legend(
               position: LegendPosition.top,
               isVisible: true,
               iconHeight: 20,
