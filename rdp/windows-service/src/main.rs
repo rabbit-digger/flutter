@@ -1,13 +1,13 @@
-#[macro_use]
-extern crate windows_service;
-
 use rabbit_digger_pro::rabbit_digger;
 use std::ffi::OsString;
 use windows_service::{
+    define_windows_service,
     service::ServiceControl,
     service_control_handler::{self, ServiceControlHandlerResult},
     service_dispatcher, Result,
 };
+
+const SERVICE_NAME: &str = "RabbitDiggerPro";
 
 define_windows_service!(ffi_service_main, service_main);
 
@@ -33,7 +33,7 @@ fn run_service(arguments: Vec<OsString>) -> Result<()> {
     };
 
     // Register system service event handler
-    let status_handle = service_control_handler::register("myservice", event_handler)?;
+    let status_handle = service_control_handler::register(SERVICE_NAME, event_handler)?;
 
     Ok(())
 }
@@ -41,6 +41,6 @@ fn run_service(arguments: Vec<OsString>) -> Result<()> {
 fn main() -> Result<()> {
     // Register generated `ffi_service_main` with the system and start the service, blocking
     // this thread until the service is stopped.
-    service_dispatcher::start("rabbit-digger-pro", ffi_service_main)?;
+    service_dispatcher::start(SERVICE_NAME, ffi_service_main)?;
     Ok(())
 }
